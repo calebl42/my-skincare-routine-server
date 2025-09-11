@@ -45,7 +45,6 @@ async function getProductData(productName) {
     currentProduct['stars'] = $(element).find(`i[data-cy="reviews-ratings-slot"]`).text().split(' ')[0];
     currentProduct['total_reviews'] = $(element).find(`span.rush-component > div > a > span`).text();
     currentProduct['url'] = 'https://www.amazon.com' + $(element).find(`a:has(h2)`).attr(`href`);
-    //console.log(JSON.stringify(currentProduct));
 
     productList.push(currentProduct);
   });
