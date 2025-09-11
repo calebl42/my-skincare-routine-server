@@ -3,8 +3,8 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { addExtra } from 'puppeteer-extra';
 import * as cheerio from 'cheerio';
 
-//Searches up "searchItem" on amazon. Returns a list of product data objects from the search results. 
-async function getProductData(searchItem) {
+//Searches up "productName" on amazon. Returns a list of product data objects from the search results. 
+async function getProductData(productName) {
   //set up browser environment with stealthy mode...
   const puppeteer = addExtra(puppeteerCore);
   puppeteer.use(StealthPlugin());
@@ -20,7 +20,7 @@ async function getProductData(searchItem) {
     waitUntil: 'networkidle2',
   });
   //navigate to the desired page, and extract relevant html
-  await page.locator(`input[type='text']`).fill(`${searchItem}\n`);
+  await page.locator(`input[type='text']`).fill(`${productName}\n`);
   await page.waitForNavigation();
   const body = await page.content();
   
@@ -39,12 +39,12 @@ async function getProductData(searchItem) {
       url: ''
     };
 
-    console.log(`product #${index}:`)
     currentProduct['image'] = $(element).find(`img`).attr(`src`);
     currentProduct['title'] = $(element).find(`h2 > span`).text();
     currentProduct['price'] = $(element).find(`span:has(> span.a-price-symbol)`).text();
     currentProduct['stars'] = $(element).find(`i[data-cy="reviews-ratings-slot"]`).text().split(' ')[0];
     currentProduct['total_reviews'] = $(element).find(`span.rush-component > div > a > span`).text();
+    currentProduct['url'] = 'https://www.amazon.com' + $(element).find(`a:has(h2)`).attr(`href`);
     //console.log(JSON.stringify(currentProduct));
 
     productList.push(currentProduct);
