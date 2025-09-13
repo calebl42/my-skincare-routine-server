@@ -4,7 +4,7 @@ import { addExtra } from 'puppeteer-extra';
 import * as cheerio from 'cheerio';
 
 //Searches up "productName" on amazon. Returns a list of product data objects from the search results. 
-async function getProductData(productName) {
+async function getProductList(productName) {
   //set up browser environment with stealthy mode...
   const puppeteer = addExtra(puppeteerCore);
   puppeteer.use(StealthPlugin());
@@ -39,6 +39,7 @@ async function getProductData(productName) {
       url: ''
     };
 
+    //fill 'er up
     currentProduct['image'] = $(element).find(`img`).attr(`src`);
     currentProduct['title'] = $(element).find(`h2 > span`).text();
     currentProduct['price'] = $(element).find(`span:has(> span.a-price-symbol)`).text();
@@ -50,7 +51,11 @@ async function getProductData(productName) {
   });
   
   await browser.close();
-  return productList;
+  return { 
+    _id: productName, //using MongoDB _id 
+    date_created: new Date(),
+    productList 
+  };
 }
 
-export default getProductData;
+export default getProductList;
