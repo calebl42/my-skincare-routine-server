@@ -3,8 +3,9 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { addExtra } from 'puppeteer-extra';
 import * as cheerio from 'cheerio';
 
-//Searches up "productName" on amazon. Returns a list of product data objects from the search results. 
-async function getProductList(productName) {
+/*Searches up "productName" on amazon. Returns an object which contains
+a list of product data objects from the search results.*/
+async function getScrapedData(productName) {
   //set up browser environment with stealthy mode...
   const puppeteer = addExtra(puppeteerCore);
   puppeteer.use(StealthPlugin());
@@ -27,7 +28,7 @@ async function getProductList(productName) {
   let productList = [];
   const $ = cheerio.load(body);
   $(`div[role="listitem"]`).each((index, element) => {
-    //only grab 50 products
+    //grab only 50 products
     if (index >= 50) return;
 
     let currentProduct = {
@@ -58,4 +59,4 @@ async function getProductList(productName) {
   };
 }
 
-export default getProductList;
+export default getScrapedData;
