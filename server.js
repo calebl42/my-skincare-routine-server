@@ -31,6 +31,6 @@ app.get('/products', async (req, res) => {
 //connect to MongoDB first, then start up server
 connectDB('product_search_results').then(() => {
   app.listen(8080, () => {
-    console.log(`server running at port 8080`);
+    console.log(`Express server running at port 8080`);
   });
 }).catch((err) => (console.error('###ERROR### ' + err)));
