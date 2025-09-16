@@ -32,6 +32,7 @@ app.get('/products', async (req, res) => {
   if (!curProductList) {
     //no database entry exists
     const newProductList = await getScrapedData(productName);
+    res.json(newProductList);
     await queries.insertProductList(db, newProductList);
   } else if (curDate - new Date(curProductList.date_created).getTime() > 86400) {
     /*database entry for this product has not been updated in over a day
