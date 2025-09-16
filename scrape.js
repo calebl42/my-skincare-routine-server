@@ -11,7 +11,7 @@ async function getScrapedData(productName) {
   puppeteer.use(StealthPlugin());
   const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
   const browser = await puppeteer.launch({
-    headless: false
+    headless: true
   });
 
   const page = await browser.newPage();
@@ -28,9 +28,6 @@ async function getScrapedData(productName) {
   let productList = [];
   const $ = cheerio.load(body);
   $(`div[data-component-type="s-search-result"]`).each((index, element) => {
-    //grab only 50 products
-    if (index >= 50) return;
-    
     let currentProduct = {
       image: '',
       title: '',
