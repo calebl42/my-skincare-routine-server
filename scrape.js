@@ -11,7 +11,7 @@ async function getScrapedData(productName) {
   puppeteer.use(StealthPlugin());
   const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
   const browser = await puppeteer.launch({
-    headless: true
+    headless: false
   });
 
   const page = await browser.newPage();
@@ -27,10 +27,10 @@ async function getScrapedData(productName) {
   
   let productList = [];
   const $ = cheerio.load(body);
-  $(`div[role="listitem"]`).each((index, element) => {
+  $(`div[data-component-type="s-search-result"]`).each((index, element) => {
     //grab only 50 products
     if (index >= 50) return;
-
+    
     let currentProduct = {
       image: '',
       title: '',
@@ -39,7 +39,7 @@ async function getScrapedData(productName) {
       total_reviews: '',
       url: ''
     };
-
+    
     //fill 'er up
     currentProduct['image'] = $(element).find(`img`).attr(`src`);
     currentProduct['title'] = $(element).find(`h2 > span`).text();
@@ -47,8 +47,8 @@ async function getScrapedData(productName) {
     currentProduct['stars'] = $(element).find(`i[data-cy="reviews-ratings-slot"]`).text().split(' ')[0];
     currentProduct['total_reviews'] = $(element).find(`span.rush-component > div > a > span`).text();
     currentProduct['url'] = 'https://www.amazon.com' + $(element).find(`a:has(h2)`).attr(`href`);
-
-    productList.push(currentProduct);
+    
+    if (currentProduct.title) productList.push(currentProduct);
   });
   
   await browser.close();
