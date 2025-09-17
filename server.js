@@ -22,6 +22,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.get('/', (req, res) => {
+  res.send('server is up');
+});
+
 app.get('/products', async (req, res) => {
   const productName = req.query.productName;
   let curDate = new Date().getTime();
