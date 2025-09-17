@@ -7,7 +7,7 @@ import cors from 'cors';
 const app = express();
 const port = process.env.PORT || 8080;
 const allowedOrigins = [
-  'https://my-skincare-routine.vercel.app/'
+  'https://my-skincare-routine.vercel.app'
 ];
 
 const corsOptions = {
