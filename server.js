@@ -3,10 +3,10 @@ import getScrapedData from './scrape.js';
 import { connectDB, getDB } from './db/connect.js';
 import * as queries from './db/queries.js';
 import cors from 'cors';
-const app = express();
 
+const app = express();
+const port = process.env.PORT || 8080;
 const allowedOrigins = [
-  'http://localhost:5173',
   'https://my-skincare-routine.vercel.app/'
 ];
 
@@ -48,7 +48,7 @@ app.get('/products', async (req, res) => {
 
 //connect to MongoDB first, then start up server
 connectDB('product_search_results').then(() => {
-  app.listen(process.env.PORT, process.env.IP, () => {
-    console.log(`Express server running at port ${process.env.PORT}`);
+  app.listen(port, () => {
+    console.log(`Express server running at port ${port}`);
   });
 }).catch((err) => (console.error('###ERROR### ' + err)));
