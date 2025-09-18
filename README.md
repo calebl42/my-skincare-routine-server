@@ -4,4 +4,5 @@
 - Amazon product data stored in **MongoDB Atlas**
 - Deployed to **AWS Elastic Beanstalk**
 - Server domain name hosted by **Cloudflare**
+- **React** for the client side code
 
