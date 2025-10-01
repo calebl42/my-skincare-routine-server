@@ -3,13 +3,18 @@ import getScrapedData from './scrape.js';
 import { connectDB, getDB } from './db/connect.js';
 import * as queries from './db/queries.js';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const port = process.env.PORT || 8080;
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:8080',
   'https://my-skincare-routine.vercel.app'
 ];
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -22,10 +27,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
-
-app.get('/', (req, res) => {
-  res.send('server is up');
-});
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/products', async (req, res) => {
   const productName = req.query.productName;
