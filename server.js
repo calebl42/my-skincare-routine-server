@@ -12,7 +12,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
   'https://my-skincare-routine.vercel.app',
-  'https://pumpkinbuns.org/'
+  'https://pumpkinbuns.org'
 ];
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
