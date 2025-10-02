@@ -45,7 +45,9 @@ async function getScrapedData(productName) {
     currentProduct['total_reviews'] = $(element).find(`span.rush-component > div > a > span`).text();
     currentProduct['url'] = 'https://www.amazon.com' + $(element).find(`a:has(h2)`).attr(`href`);
     
-    if (currentProduct.title) productList.push(currentProduct);
+    if (currentProduct.title) {
+      productList.push(currentProduct);
+    }
   });
   
   await browser.close();
@@ -55,5 +57,9 @@ async function getScrapedData(productName) {
     productList 
   };
 }
+
+let testData = await getScrapedData('moisturizer');
+
+console.log(testData);
 
 export default getScrapedData;
