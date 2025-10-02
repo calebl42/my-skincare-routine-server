@@ -58,8 +58,4 @@ async function getScrapedData(productName) {
   };
 }
 
-let testData = await getScrapedData('moisturizer');
-
-console.log(testData);
-
 export default getScrapedData;
