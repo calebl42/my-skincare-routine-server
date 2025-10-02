@@ -12,7 +12,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
   'https://my-skincare-routine.vercel.app',
-  'https://pumpkinbuns.org'
+  'https://pumpkinbuns.org',
+  'https://www.pumpkinbuns.org'
 ];
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,6 +60,6 @@ app.get('/products', async (req, res) => {
 //connect to MongoDB first, then start up server
 connectDB('product_search_results').then(() => {
   app.listen(port, () => {
-    console.log(`Express server running at port ${port}`);
+    console.log(`server running at http://localhost:${port}`);
   });
 }).catch((err) => (console.error('###ERROR### ' + err)));
