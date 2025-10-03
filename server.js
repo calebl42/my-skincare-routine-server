@@ -1,5 +1,4 @@
 import express from 'express';
-import getScrapedData from './scrape.js';
 import { connectDB, getDB } from './db/connect.js';
 import * as queries from './db/queries.js';
 import cors from 'cors';
@@ -38,23 +37,23 @@ app.get('/products', async (req, res) => {
   
   const curProductList = await queries.getProductList(db, productName);
 
-  // if (!curProductList) {
-  //   //no database entry exists
-  //   const newProductList = await getScrapedData(productName);
-  //   res.json(newProductList);
-  //   await queries.insertProductList(db, newProductList);
-  // } else if (curDate - new Date(curProductList.date_created).getTime() > 3 * 86400000) {
-  //   /*database entry for this product has not been updated in over 3 days
-  //   therefore we need to update the db after returning the old productList*/
-  //   res.json(curProductList);
-  //   const newProductList = await getScrapedData(productName);
-  //   await queries.updateProductList(db, productName, newProductList);
-  // } else {
-  //   //database entry exists and is up to date
-  //   res.json(curProductList);
-  // }
-
-  res.json(curProductList);
+  if (!curProductList) {
+    //no database entry exists
+    const lambdaResponse = await fetch(process.env.LAMBDA_URL + productName);
+    const newProductList = await lambdaResponse.json();
+    res.json(newProductList);
+    await queries.insertProductList(db, newProductList);
+  } else if (curDate - new Date(curProductList.date_created).getTime() > 7 * 86400000) {
+    /*database entry for this product has not been updated in over 7 days
+    therefore we need to update the db after returning the old productList*/
+    res.json(curProductList);
+    const lambdaResponse = await fetch(process.env.LAMBDA_URL + productName);
+    const newProductList = await lambdaResponse.json();
+    await queries.updateProductList(db, productName, newProductList);
+  } else {
+    //database entry exists and is up to date
+    res.json(curProductList);
+  }
 });
 
 //connect to MongoDB first, then start up server
